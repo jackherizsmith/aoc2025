@@ -6,13 +6,14 @@ const START = 50;
 
 const part1 = (rawInput: string) => {
   const input = parseInput(rawInput);
-  const directions = input.split("\n");
+  const turns = input.split("\n");
   let currentPosition = START;
   let zerosCount = 0;
-  for (const direction of directions) {
-    const dir = direction.slice(0, 1);
-    const isForwards = dir === "R";
-    const distance = Number(direction.slice(1));
+
+  for (const turn of turns) {
+    const direction = turn.slice(0, 1);
+    const isForwards = direction === "R";
+    const distance = Number(turn.slice(1));
     const travelled = distance * (isForwards ? 1 : -1);
     currentPosition = currentPosition + travelled;
 
@@ -25,30 +26,30 @@ const part1 = (rawInput: string) => {
 
 const part2 = (rawInput: string) => {
   const input = parseInput(rawInput);
-  const directions = input.split("\n");
+  const turns = input.split("\n");
   let currentPosition = START;
   let zerosCount = 0;
-  for (const direction of directions) {
-    const dir = direction.slice(0, 1);
-    const isForwards = dir === "R";
-    const distance = Number(direction.slice(1));
+
+  for (const turn of turns) {
+    const direction = turn.slice(0, 1);
+    const isForwards = direction === "R";
+    const distance = Number(turn.slice(1));
     const travelled = distance * (isForwards ? 1 : -1);
     currentPosition = currentPosition + travelled;
 
     if (currentPosition >= 100) {
-      zerosCount++;
-      currentPosition -= 100;
-      while (currentPosition >= 100) {
-        zerosCount++;
+      do {
         currentPosition -= 100;
-      }
-    } else if (currentPosition < 0) {
-      zerosCount++;
-      currentPosition += 100;
-      while (currentPosition < 0) {
         zerosCount++;
+      } while (currentPosition >= 100);
+    } else if (currentPosition < 0) {
+      do {
         currentPosition += 100;
-      }
+        zerosCount++;
+      } while (currentPosition < 0);
+    }
+    if (currentPosition === 0) {
+      zerosCount++;
     }
   }
   return zerosCount;
@@ -76,16 +77,10 @@ L82`,
   part2: {
     tests: [
       {
-        input: `L68
-L30
-R48
-L5
-R60
-L55
-L1
-L99
-R14
-L82`,
+        input: `R50
+R50
+R100
+R150`,
         expected: 6,
       },
     ],
