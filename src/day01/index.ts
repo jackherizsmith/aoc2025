@@ -35,22 +35,18 @@ const part2 = (rawInput: string) => {
     const isForwards = direction === "R";
     const distance = Number(turn.slice(1));
     const travelled = distance * (isForwards ? 1 : -1);
-    currentPosition = currentPosition + travelled;
+    const newPosition = currentPosition + travelled;
 
-    if (currentPosition >= 100) {
-      do {
-        currentPosition -= 100;
-        zerosCount++;
-      } while (currentPosition >= 100);
-    } else if (currentPosition < 0) {
-      do {
-        currentPosition += 100;
-        zerosCount++;
-      } while (currentPosition < 0);
+    const start = Math.min(currentPosition, newPosition);
+    const end = Math.max(currentPosition, newPosition);
+    const first = Math.ceil(start / 100);
+    const last = Math.floor(end / 100);
+
+    zerosCount += Math.max(0, last - first + 1);
+    if (currentPosition % 100 === 0) {
+      zerosCount -= 1;
     }
-    if (currentPosition === 0) {
-      zerosCount++;
-    }
+    currentPosition = newPosition;
   }
   return zerosCount;
 };
@@ -77,11 +73,44 @@ L82`,
   part2: {
     tests: [
       {
-        input: `R50
-R50
-R100
-R150`,
-        expected: 6,
+        input: `
+        R41
+        L40
+        R4`,
+        expected: 0,
+      },
+      {
+        input: `
+        L50
+        R140`,
+        expected: 2,
+      },
+      {
+        input: `
+        R50
+        L40`,
+        expected: 1,
+      },
+      {
+        input: `
+        R60
+        L40`,
+        expected: 2,
+      },
+      {
+        input: `
+        R160
+        L120`,
+        expected: 4,
+      },
+      {
+        input: `
+        R160
+        L1
+        L1
+        L1
+        L40`,
+        expected: 3,
       },
     ],
     solution: part2,
